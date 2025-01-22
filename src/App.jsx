@@ -1,4 +1,3 @@
-// src/App.jsx
 import React, { useState, useEffect } from "react";
 import { Groq } from "groq-sdk";
 
@@ -34,54 +33,116 @@ const App = () => {
     return () => clearInterval(timer);
   }, [quizStarted, quizFinished, reviewMode, timeLeft]);
 
-  // Format time from seconds to MM:SS
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  // Generate quiz using Groq API
-  const generateQuiz = async () => {
-    setIsLoading(true);
-    try {
-      const groq = new Groq({
-        apiKey: import.meta.env.VITE_GROQ_API_KEY,
-        dangerouslyAllowBrowser: true,
-      });
+ const generateQuiz = async () => {
+   setIsLoading(true);
+   try {
+     const groq = new Groq({
+       apiKey: import.meta.env.VITE_GROQ_API_KEY,
+       dangerouslyAllowBrowser: true,
+     });
 
-      const response = await groq.chat.completions.create({
-        messages: [
-          {
-            role: "user",
-            content: `[STRICTLY REPLY IN JSON NO SPEAKING]Generate 10 ${difficulty} multiple-choice questions about Linux commands usage. Focus on these commands: cat, chmod, cd, cp, date, echo, ftp, grep, head, ls, lpr, more, mkdir, mv, ncftp, print, pwd, rm, rmdir, rsh, setenv, sort, tail, tar, telnet, wc. Format as JSON array with structure: [{"question": "...", "options": ["a", "b", "c", "d"], "correct": 0}]. Make questions practical and scenario-based.`,
-          },
-        ],
-        model: "llama-3.3-70b-versatile",
-        temperature: 0.7,
-        max_tokens: 2000,
-      });
-
-      const quizData = JSON.parse(response.choices[0].message.content);
-      setQuestions(quizData);
-      setQuizStarted(true);
-      setTimeLeft(QUIZ_TIME);
-    } catch (error) {
-      console.error("Error generating quiz:", error);
-      alert("Error generating quiz. Please try again.");
-    } finally {
-      setIsLoading(false);
+     const prompt = `Return a JSON object containing Linux command quiz questions. Format:
+{
+  "questions": [
+    {
+      "question": "string",
+      "options": ["string", "string", "string", "string"],
+      "correct": number,
+      "explanation": "string",
+      "command_example": "string"
     }
-  };
+  ]
+}
 
-  const handleAnswer = (questionIndex, answerIndex) => {
-    if (!quizFinished && !reviewMode) {
-      setAnswers((prev) => ({
-        ...prev,
-        [questionIndex]: answerIndex,
-      }));
-    }
-  };
+Requirements:
+- Generate 10 ${difficulty} multiple-choice questions about Linux commands
+- Focus on: cat, chmod, cd, cp, date, echo, ftp, grep, head, ls, lpr, more, mkdir, mv, ncftp, print, pwd, rm, rmdir, rsh, setenv, sort, tail, tar, telnet, wc
+- Make questions practical and scenario-based
+- Include clear explanations and command examples
+- Ensure response is ONLY the JSON object, no additional text or markdown
+- correct should be a number between 0 and 3 representing the correct answer index
+- Vary the correct answer indices - don't always use the same index
+- Return valid, parseable JSON
+
+Example of one question object:
+{
+  "question": "You need to find all files containing the word 'error' in a log directory. Which command should you use?",
+  "options": [
+    "ls -l /var/log/ | error",
+    "find /var/log/ -name error",
+    "cat /var/log/ | error",
+    "grep -r 'error' /var/log/"
+  ],
+  "correct": 3,
+  "explanation": "The grep command with -r (recursive) flag searches through all files in the specified directory and its subdirectories for the given pattern.",
+  "command_example": "grep -r 'error' /var/log/"
+}`;
+
+     const response = await groq.chat.completions.create({
+       messages: [
+         {
+           role: "system",
+           content:
+             "You are a JSON generator. Only output valid JSON objects without any additional text, markdown formatting, or explanation.",
+         },
+         {
+           role: "user",
+           content: prompt,
+         },
+       ],
+       model: "llama-3.3-70b-versatile",
+       temperature: 0.7,
+       max_tokens: 2000,
+     });
+
+     let jsonString = response.choices[0].message.content.trim();
+
+     // Remove any potential markdown code block indicators
+     jsonString = jsonString
+       .replace(/```json/g, "")
+       .replace(/```/g, "")
+       .trim();
+
+     try {
+       const quizData = JSON.parse(jsonString);
+       if (
+         quizData.questions &&
+         Array.isArray(quizData.questions) &&
+         quizData.questions.length === 10
+       ) {
+         setQuestions(quizData.questions);
+         setQuizStarted(true);
+         setTimeLeft(QUIZ_TIME);
+       } else {
+         throw new Error("Invalid quiz data format");
+       }
+     } catch (parseError) {
+       console.error("JSON Parse Error:", parseError);
+       console.log("Received content:", jsonString);
+       throw new Error("Failed to parse quiz data");
+     }
+   } catch (error) {
+     console.error("Error generating quiz:", error);
+     alert("Error generating quiz. Please try again.");
+   } finally {
+     setIsLoading(false);
+   }
+ };
+
+ const handleAnswer = (questionIndex, answerIndex) => {
+   if (!quizFinished && !reviewMode) {
+     setAnswers((prev) => ({
+       ...prev,
+       [questionIndex]: answerIndex,
+     }));
+   }
+ };
 
   const finishQuiz = () => {
     let finalScore = 0;
@@ -117,7 +178,6 @@ const App = () => {
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white font-satoshi relative pb-16">
       <div className="container mx-auto px-4 py-12 min-h-screen">
         <div className="max-w-4xl mx-auto">
-          {/* Title */}
           <h1 className="text-5xl font-bold mb-12 text-center bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
             Linux Commands Quiz
           </h1>
@@ -158,7 +218,6 @@ const App = () => {
                 className="mx-auto mb-6 rounded-lg"
                 style={{ width: "100px", height: "auto", boxShadow: "none" }}
               />
-
               <p className="text-xl animate-pulse">Generating your quiz...</p>
             </div>
           )}
@@ -167,7 +226,6 @@ const App = () => {
           {((quizStarted && !quizFinished && !isLoading) || reviewMode) &&
             questions.length > 0 && (
               <div className="backdrop-blur-lg bg-gray-800/50 p-8 rounded-2xl shadow-xl border border-gray-700">
-                {/* Quiz Header */}
                 <div className="flex justify-between items-center mb-6">
                   <div className="flex items-center gap-4">
                     <span className="bg-gray-700 px-4 py-2 rounded-lg text-lg">
@@ -186,51 +244,72 @@ const App = () => {
                   )}
                 </div>
 
-                {/* Question and Answers */}
                 <div className="mb-8">
                   <h2 className="text-xl font-medium mb-6 leading-relaxed">
                     {questions[currentQuestion].question}
                   </h2>
                   <div className="space-y-4">
-                    {questions[currentQuestion].options.map((option, index) => (
-                      <button
-                        key={index}
-                        onClick={() => handleAnswer(currentQuestion, index)}
-                        disabled={reviewMode || quizFinished}
-                        className={`w-full p-4 text-left rounded-lg transition transform relative ${
-                          reviewMode || quizFinished
-                            ? "cursor-default"
-                            : "hover:translate-x-1"
-                        } ${
-                          answers[currentQuestion] === index
-                            ? index === questions[currentQuestion].correct
-                              ? "bg-green-600/80 border-2 border-green-400"
-                              : showAnswers
-                              ? "bg-red-600/80 border-2 border-red-400"
-                              : "bg-blue-600/80 border-2 border-blue-400"
-                            : index === questions[currentQuestion].correct &&
-                              showAnswers
-                            ? "bg-green-600/50 border-2 border-green-400"
-                            : "bg-gray-700 border border-gray-600"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <span className="inline-block w-8 h-8 text-center leading-8 bg-gray-800 rounded-full mr-3">
-                              {String.fromCharCode(65 + index)}
-                            </span>
-                            {option}
-                          </div>
-                          {showAnswers &&
-                            index === questions[currentQuestion].correct && (
-                              <span className="text-green-400 font-medium">
-                                ✓ Correct Answer
+                    {questions[currentQuestion]?.options.map(
+                      (option, index) => (
+                        <button
+                          key={index}
+                          onClick={() => handleAnswer(currentQuestion, index)}
+                          disabled={reviewMode || quizFinished}
+                          className={`w-full p-4 text-left rounded-lg transition transform relative ${
+                            reviewMode || quizFinished
+                              ? "cursor-default"
+                              : "hover:translate-x-1"
+                          } ${
+                            answers[currentQuestion] === index
+                              ? showAnswers
+                                ? index === questions[currentQuestion].correct
+                                  ? "bg-green-600/80 border-2 border-green-400"
+                                  : "bg-red-600/80 border-2 border-red-400"
+                                : "bg-blue-600/80 border-2 border-blue-400"
+                              : showAnswers &&
+                                index === questions[currentQuestion].correct
+                              ? "bg-green-600/50 border-2 border-green-400"
+                              : "bg-gray-700 border border-gray-600"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <span className="inline-block w-8 h-8 text-center leading-8 bg-gray-800 rounded-full mr-3">
+                                {String.fromCharCode(65 + index)}
                               </span>
-                            )}
-                        </div>
-                      </button>
-                    ))}
+                              {option}
+                            </div>
+                            {showAnswers &&
+                              index === questions[currentQuestion].correct && (
+                                <span className="text-green-400 font-medium">
+                                  ✓ Correct Answer
+                                </span>
+                              )}
+                          </div>
+                        </button>
+                      )
+                    )}
                   </div>
+
+                  {/* Explanation Section - Only shown in review mode or after answering */}
+                  {(reviewMode || (showAnswers && quizFinished)) && (
+                    <div className="mt-8 p-6 bg-gray-700/50 rounded-lg border border-gray-600">
+                      <h3 className="text-xl font-semibold mb-4 text-blue-300">
+                        Explanation
+                      </h3>
+                      <p className="text-gray-200 mb-4">
+                        {questions[currentQuestion].explanation}
+                      </p>
+                      <div className="mt-4">
+                        <h4 className="font-semibold text-blue-300 mb-2">
+                          Example Usage:
+                        </h4>
+                        <code className="block p-3 bg-gray-800 rounded-lg font-mono text-sm">
+                          {questions[currentQuestion].command_example}
+                        </code>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Navigation Buttons */}
