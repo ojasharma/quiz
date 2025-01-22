@@ -1,0 +1,567 @@
+[
+  {
+    "question": "You need to change the permissions of a file named 'report.txt' to read, write, and execute for the owner, and read for everyone else. Which command should you use?",
+    "options": [
+      "chmod 755 report.txt",
+      "chmod 777 report.txt",
+      "chmod 644 report.txt",
+      "chmod u+rwx report.txt"
+    ],
+    "correct": 0,
+    "explanation": "The 755 mode gives the owner read, write, and execute permissions, and read and execute permissions to everyone else.",
+    "command_example": "chmod 755 report.txt"
+  },
+  {
+    "question": "You want to append the contents of 'file1.txt' to 'file2.txt'. Which command should you use?",
+    "options": [
+      "cat file1.txt > file2.txt",
+      "cat file1.txt >> file2.txt",
+      "cp file1.txt file2.txt",
+      "cat file2.txt < file1.txt"
+    ],
+    "correct": 1,
+    "explanation": "The '>>' operator appends the output of 'file1.txt' to 'file2.txt'.",
+    "command_example": "cat file1.txt >> file2.txt"
+  },
+  {
+    "question": "You want to display the current date and time in the format 'YYYY-MM-DD HH:MM:SS'. Which command should you use?",
+    "options": [
+      "date +'%Y-%m-%d %H:%M:%S'",
+      "date +'%d-%m-%Y %H:%M:%S'",
+      "date +'%Y-%d-%m %H:%M:%S'",
+      "date +'%H:%M:%S %Y-%m-%d'"
+    ],
+    "correct": 0,
+    "explanation": "The '%Y-%m-%d %H:%M:%S' format outputs the date as 'YYYY-MM-DD' and the time as 'HH:MM:SS'.",
+    "command_example": "date +'%Y-%m-%d %H:%M:%S'"
+  },
+  {
+    "question": "You want to change the working directory to '/home/user/Documents'. Which command should you use?",
+    "options": [
+      "cd /home/user/Documents",
+      "cd ~/Documents",
+      "cd /Documents",
+      "cd home/user/Documents"
+    ],
+    "correct": 0,
+    "explanation": "The 'cd' command changes the current directory to the specified path.",
+    "command_example": "cd /home/user/Documents"
+  },
+  {
+    "question": "You want to copy the contents of 'source.txt' to 'destination.txt' without overwriting the destination if it exists. Which command should you use?",
+    "options": [
+      "cp -i source.txt destination.txt",
+      "cp source.txt destination.txt",
+      "cp -n source.txt destination.txt",
+      "cp -f source.txt destination.txt"
+    ],
+    "correct": 0,
+    "explanation": "The '-i' flag prompts before overwriting an existing file, providing safety when copying.",
+    "command_example": "cp -i source.txt destination.txt"
+  },
+  {
+    "question": "You want to list the permissions of 'file.txt'. Which command should you use?",
+    "options": [
+      "chmod -l file.txt",
+      "ls -l file.txt",
+      "ls file.txt",
+      "stat file.txt"
+    ],
+    "correct": 1,
+    "explanation": "The 'ls -l' command lists the permissions and other details of the file.",
+    "command_example": "ls -l file.txt"
+  },
+  {
+    "question": "You want to set the execute permission for the owner of 'script.sh'. Which command should you use?",
+    "options": [
+      "chmod u+x script.sh",
+      "chmod +x script.sh",
+      "chmod 777 script.sh",
+      "chmod u-w script.sh"
+    ],
+    "correct": 0,
+    "explanation": "The 'u+x' option adds execute permission for the user (owner) of the file.",
+    "command_example": "chmod u+x script.sh"
+  },
+  {
+    "question": "You want to check the date and time in UTC format. Which command should you use?",
+    "options": ["date --utc", "date --gmt", "date -u", "date --iso-8601"],
+    "correct": 2,
+    "explanation": "The '-u' flag shows the date and time in UTC.",
+    "command_example": "date -u"
+  },
+  {
+    "question": "You need to display the contents of 'log.txt' and search for the word 'failure' at the same time. Which command should you use?",
+    "options": [
+      "cat log.txt | grep failure",
+      "grep failure log.txt",
+      "cat log.txt > grep failure",
+      "grep failure | cat log.txt"
+    ],
+    "correct": 0,
+    "explanation": "Using 'cat log.txt | grep failure' pipes the contents of 'log.txt' to 'grep' for searching the word 'failure'.",
+    "command_example": "cat log.txt | grep failure"
+  },
+  {
+    "question": "You need to copy a directory 'dir1' and its contents to 'dir2'. Which command should you use?",
+    "options": [
+      "cp dir1 dir2",
+      "cp -r dir1 dir2",
+      "cp -r dir1/* dir2",
+      "cp -a dir1 dir2"
+    ],
+    "correct": 1,
+    "explanation": "The '-r' flag is used to copy directories recursively along with their contents.",
+    "command_example": "cp -r dir1 dir2"
+  },
+  {
+    "question": "You want to display the first 10 lines of a file 'data.txt'. Which command should you use?",
+    "options": [
+      "head data.txt",
+      "tail data.txt",
+      "grep -n data.txt",
+      "echo data.txt"
+    ],
+    "correct": 0,
+    "explanation": "The 'head' command displays the first 10 lines of the file by default.",
+    "command_example": "head data.txt"
+  },
+  {
+    "question": "You want to search for the word 'error' in 'logfile.txt' and display the matching lines. Which command should you use?",
+    "options": [
+      "grep 'error' logfile.txt",
+      "echo 'error' logfile.txt",
+      "cat logfile.txt | grep error",
+      "ftp error logfile.txt"
+    ],
+    "correct": 0,
+    "explanation": "The 'grep' command is used to search for a pattern in a file and display matching lines.",
+    "command_example": "grep 'error' logfile.txt"
+  },
+  {
+    "question": "You want to list all the files in the current directory, including hidden ones. Which command should you use?",
+    "options": ["ls -a", "ls -l", "ls -h", "ls -d"],
+    "correct": 0,
+    "explanation": "The '-a' flag lists all files, including hidden ones, in the current directory.",
+    "command_example": "ls -a"
+  },
+  {
+    "question": "You want to send the string 'Hello, World!' to the terminal. Which command should you use?",
+    "options": [
+      "echo 'Hello, World!'",
+      "cat 'Hello, World!'",
+      "echo Hello, World!",
+      "grep 'Hello, World!'"
+    ],
+    "correct": 0,
+    "explanation": "The 'echo' command prints the given string to the terminal.",
+    "command_example": "echo 'Hello, World!'"
+  },
+  {
+    "question": "You want to transfer a file 'file1.txt' from your local machine to a remote FTP server. Which command should you use?",
+    "options": [
+      "ftp file1.txt",
+      "ftp -put file1.txt",
+      "ftp -put file1.txt remote_server",
+      "put file1.txt"
+    ],
+    "correct": 0,
+    "explanation": "The 'ftp' command initiates an FTP session. The file would need to be uploaded manually within the FTP session.",
+    "command_example": "ftp file1.txt"
+  },
+  {
+    "question": "You want to display the last 10 lines of 'logfile.txt'. Which command should you use?",
+    "options": [
+      "tail logfile.txt",
+      "head -n 10 logfile.txt",
+      "cat logfile.txt | tail",
+      "echo logfile.txt"
+    ],
+    "correct": 0,
+    "explanation": "The 'tail' command displays the last 10 lines of a file by default.",
+    "command_example": "tail logfile.txt"
+  },
+  {
+    "question": "You want to list all the files in a directory 'docs' sorted by modification time. Which command should you use?",
+    "options": ["ls -lt docs", "ls -l docs", "ls docs -t", "ls -t docs"],
+    "correct": 0,
+    "explanation": "The '-lt' flag sorts the files by modification time, with the newest files first.",
+    "command_example": "ls -lt docs"
+  },
+  {
+    "question": "You want to search for the string 'fail' in 'system.log' and ignore case differences. Which command should you use?",
+    "options": [
+      "grep -i 'fail' system.log",
+      "grep 'fail' -i system.log",
+      "grep fail system.log -i",
+      "grep -f 'fail' system.log"
+    ],
+    "correct": 0,
+    "explanation": "The '-i' flag makes the 'grep' search case-insensitive.",
+    "command_example": "grep -i 'fail' system.log"
+  },
+  {
+    "question": "You want to display a directory listing of 'dir1' in a long format, including permissions and file sizes. Which command should you use?",
+    "options": ["ls -l dir1", "ls -a dir1", "ls dir1", "ls -h dir1"],
+    "correct": 0,
+    "explanation": "The '-l' flag displays the detailed listing, including permissions, owner, size, and date.",
+    "command_example": "ls -l dir1"
+  },
+  {
+    "question": "You want to display the current date in the format 'MM-DD-YYYY'. Which command should you use?",
+    "options": [
+      "date +'%m-%d-%Y'",
+      "date +'%d-%m-%Y'",
+      "date +'%Y-%m-%d'",
+      "echo 'MM-DD-YYYY'"
+    ],
+    "correct": 0,
+    "explanation": "The '+%m-%d-%Y' format outputs the date in 'MM-DD-YYYY' format.",
+    "command_example": "date +'%m-%d-%Y'"
+  },
+  {
+    "question": "You want to create a new directory called 'reports' in the current directory. Which command should you use?",
+    "options": [
+      "mkdir reports",
+      "mv reports",
+      "mkdir -p reports",
+      "mkdir ./reports"
+    ],
+    "correct": 0,
+    "explanation": "The 'mkdir' command creates a new directory with the specified name.",
+    "command_example": "mkdir reports"
+  },
+  {
+    "question": "You want to move a file named 'oldfile.txt' to the 'archive' directory. Which command should you use?",
+    "options": [
+      "mv oldfile.txt archive/",
+      "cp oldfile.txt archive/",
+      "mv oldfile.txt to archive",
+      "move oldfile.txt archive/"
+    ],
+    "correct": 0,
+    "explanation": "The 'mv' command is used to move files or directories to a new location.",
+    "command_example": "mv oldfile.txt archive/"
+  },
+  {
+    "question": "You want to print the contents of 'document.txt' to the default printer. Which command should you use?",
+    "options": [
+      "lpr document.txt",
+      "lp document.txt",
+      "print document.txt",
+      "cat document.txt | lpr"
+    ],
+    "correct": 0,
+    "explanation": "The 'lpr' command sends a file to the printer for printing.",
+    "command_example": "lpr document.txt"
+  },
+  {
+    "question": "You want to view the contents of a large file 'logfile.log' one page at a time. Which command should you use?",
+    "options": [
+      "more logfile.log",
+      "cat logfile.log",
+      "less logfile.log",
+      "head logfile.log"
+    ],
+    "correct": 0,
+    "explanation": "The 'more' command allows you to view the contents of a file one screen at a time.",
+    "command_example": "more logfile.log"
+  },
+  {
+    "question": "You want to upload a file 'file.txt' to a remote FTP server using ncftp. Which command should you use?",
+    "options": [
+      "ncftp -u file.txt",
+      "ncftp put file.txt",
+      "ncftp upload file.txt",
+      "ncftp send file.txt"
+    ],
+    "correct": 1,
+    "explanation": "The 'ncftp' command is used to interact with FTP servers, and the 'put' command uploads a file.",
+    "command_example": "ncftp put file.txt"
+  },
+  {
+    "question": "You want to create a directory structure 'projects/code/java' if it doesn't already exist. Which command should you use?",
+    "options": [
+      "mkdir -p projects/code/java",
+      "mkdir projects/code/java",
+      "mkdir --parents projects/code/java",
+      "mkdir -r projects/code/java"
+    ],
+    "correct": 0,
+    "explanation": "The '-p' flag ensures that the directory structure is created even if parent directories don't exist.",
+    "command_example": "mkdir -p projects/code/java"
+  },
+  {
+    "question": "You want to change the name of 'oldname.txt' to 'newname.txt' in the current directory. Which command should you use?",
+    "options": [
+      "mv oldname.txt newname.txt",
+      "rename oldname.txt newname.txt",
+      "cp oldname.txt newname.txt",
+      "mv newname.txt oldname.txt"
+    ],
+    "correct": 0,
+    "explanation": "The 'mv' command is used to move or rename files.",
+    "command_example": "mv oldname.txt newname.txt"
+  },
+  {
+    "question": "You want to view the contents of 'file.txt' with the ability to scroll backward and forward. Which command should you use?",
+    "options": [
+      "less file.txt",
+      "more file.txt",
+      "cat file.txt",
+      "scroll file.txt"
+    ],
+    "correct": 0,
+    "explanation": "'less' allows both forward and backward scrolling through the contents of a file.",
+    "command_example": "less file.txt"
+  },
+  {
+    "question": "You want to create a new directory 'backup' and move all '.log' files into it. Which set of commands should you use?",
+    "options": [
+      "mkdir backup && mv *.log backup/",
+      "mkdir backup && mv *.log backup",
+      "mv *.log backup/ && mkdir backup",
+      "mkdir backup; mv *.log backup/"
+    ],
+    "correct": 0,
+    "explanation": "The '&&' operator ensures that the second command is executed only if the first command succeeds.",
+    "command_example": "mkdir backup && mv *.log backup/"
+  },
+  {
+    "question": "You want to download a file 'data.csv' from a remote FTP server using ncftp. Which command should you use?",
+    "options": [
+      "ncftp get data.csv",
+      "ncftp fetch data.csv",
+      "ncftp download data.csv",
+      "ncftp retrieve data.csv"
+    ],
+    "correct": 0,
+    "explanation": "The 'get' command is used in 'ncftp' to download a file from a remote server.",
+    "command_example": "ncftp get data.csv"
+  },
+  {
+    "question": "You want to display the current working directory. Which command should you use?",
+    "options": ["pwd", "ls", "print", "cd"],
+    "correct": 0,
+    "explanation": "The 'pwd' command prints the current working directory.",
+    "command_example": "pwd"
+  },
+  {
+    "question": "You want to remove a file named 'oldfile.txt'. Which command should you use?",
+    "options": [
+      "rm oldfile.txt",
+      "rmdir oldfile.txt",
+      "remove oldfile.txt",
+      "delete oldfile.txt"
+    ],
+    "correct": 0,
+    "explanation": "The 'rm' command removes files in Linux.",
+    "command_example": "rm oldfile.txt"
+  },
+  {
+    "question": "You want to remove an empty directory named 'oldfolder'. Which command should you use?",
+    "options": [
+      "rmdir oldfolder",
+      "rm -r oldfolder",
+      "rm oldfolder",
+      "rmdir -f oldfolder"
+    ],
+    "correct": 0,
+    "explanation": "The 'rmdir' command removes empty directories.",
+    "command_example": "rmdir oldfolder"
+  },
+  {
+    "question": "You want to print the message 'Backup complete' to the terminal. Which command should you use?",
+    "options": [
+      "echo 'Backup complete'",
+      "print 'Backup complete'",
+      "cat 'Backup complete'",
+      "echo Backup complete"
+    ],
+    "correct": 0,
+    "explanation": "The 'echo' command prints text or variables to the terminal.",
+    "command_example": "echo 'Backup complete'"
+  },
+  {
+    "question": "You want to remove a directory and all of its contents, including subdirectories. Which command should you use?",
+    "options": [
+      "rm -r directory_name",
+      "rmdir directory_name",
+      "rm directory_name",
+      "rm -rf directory_name"
+    ],
+    "correct": 0,
+    "explanation": "The 'rm -r' command removes a directory and its contents recursively.",
+    "command_example": "rm -r directory_name"
+  },
+  {
+    "question": "You want to run a command on a remote machine via the RSH protocol. Which command should you use?",
+    "options": [
+      "rsh remote_host 'command'",
+      "ssh remote_host 'command'",
+      "rlogin remote_host 'command'",
+      "telnet remote_host 'command'"
+    ],
+    "correct": 0,
+    "explanation": "The 'rsh' command is used for remote command execution over the network.",
+    "command_example": "rsh remote_host 'command'"
+  },
+  {
+    "question": "You want to remove all files with the '.bak' extension in the current directory. Which command should you use?",
+    "options": ["rm *.bak", "rm -r *.bak", "rmdir *.bak", "del *.bak"],
+    "correct": 0,
+    "explanation": "The 'rm' command removes files matching the pattern, such as '*.bak'.",
+    "command_example": "rm *.bak"
+  },
+  {
+    "question": "You want to remove a directory named 'temp_folder' that is not empty. Which command should you use?",
+    "options": [
+      "rm -r temp_folder",
+      "rmdir temp_folder",
+      "rm temp_folder",
+      "rmdir -r temp_folder"
+    ],
+    "correct": 0,
+    "explanation": "The 'rm -r' command recursively removes directories and their contents.",
+    "command_example": "rm -r temp_folder"
+  },
+  {
+    "question": "You want to display the current date and time, along with the system name and user, in one line. Which command should you use?",
+    "options": [
+      "print '$(date) $(whoami) $(hostname)'",
+      "echo '$(date) $(whoami) $(hostname)'",
+      "date && whoami && hostname",
+      "echo $(date) $(whoami) $(hostname)"
+    ],
+    "correct": 1,
+    "explanation": "The 'echo' command with command substitution prints the current date, user, and host.",
+    "command_example": "echo '$(date) $(whoami) $(hostname)'"
+  },
+  {
+    "question": "You want to list all files and directories, including hidden ones, in a long format. Which command should you use?",
+    "options": ["ls -la", "ls -l", "ls -a", "ls -lh"],
+    "correct": 0,
+    "explanation": "The 'ls -la' command lists all files and directories, including hidden ones, in long format.",
+    "command_example": "ls -la"
+  },
+  {
+    "question": "You want to set an environment variable 'MY_VAR' to 'value'. Which command should you use?",
+    "options": [
+      "setenv MY_VAR value",
+      "export MY_VAR=value",
+      "set MY_VAR value",
+      "env MY_VAR=value"
+    ],
+    "correct": 0,
+    "explanation": "The 'setenv' command is used to set environment variables in some shells like C-shell.",
+    "command_example": "setenv MY_VAR value"
+  },
+  {
+    "question": "You want to sort the contents of a file 'data.txt' alphabetically. Which command should you use?",
+    "options": [
+      "sort data.txt",
+      "cat data.txt | sort",
+      "sort -a data.txt",
+      "ls data.txt"
+    ],
+    "correct": 0,
+    "explanation": "The 'sort' command arranges the lines of a file in ascending order by default.",
+    "command_example": "sort data.txt"
+  },
+  {
+    "question": "You want to display the last 10 lines of a file 'logfile.log'. Which command should you use?",
+    "options": [
+      "tail logfile.log",
+      "head -n 10 logfile.log",
+      "cat logfile.log | tail",
+      "echo logfile.log"
+    ],
+    "correct": 0,
+    "explanation": "The 'tail' command displays the last 10 lines of a file by default.",
+    "command_example": "tail logfile.log"
+  },
+  {
+    "question": "You want to create a compressed archive of a directory 'folder' named 'archive.tar.gz'. Which command should you use?",
+    "options": [
+      "tar -czf archive.tar.gz folder",
+      "tar -xf archive.tar.gz folder",
+      "tar -cf archive.tar.gz folder",
+      "gzip -r folder > archive.tar.gz"
+    ],
+    "correct": 0,
+    "explanation": "The 'tar -czf' command creates a compressed archive using gzip.",
+    "command_example": "tar -czf archive.tar.gz folder"
+  },
+  {
+    "question": "You want to establish a Telnet connection to a remote host '192.168.1.1'. Which command should you use?",
+    "options": [
+      "telnet 192.168.1.1",
+      "rsh 192.168.1.1",
+      "ssh 192.168.1.1",
+      "connect 192.168.1.1"
+    ],
+    "correct": 0,
+    "explanation": "The 'telnet' command is used to connect to remote servers over Telnet.",
+    "command_example": "telnet 192.168.1.1"
+  },
+  {
+    "question": "You want to count the number of lines, words, and characters in a file 'file.txt'. Which command should you use?",
+    "options": [
+      "wc file.txt",
+      "wc -l file.txt",
+      "cat file.txt | wc",
+      "count file.txt"
+    ],
+    "correct": 0,
+    "explanation": "The 'wc' command counts the number of lines, words, and characters in a file.",
+    "command_example": "wc file.txt"
+  },
+  {
+    "question": "You want to sort the contents of a file 'data.txt' in reverse order. Which command should you use?",
+    "options": [
+      "sort -r data.txt",
+      "sort data.txt -r",
+      "sort -n data.txt",
+      "sort data.txt --reverse"
+    ],
+    "correct": 0,
+    "explanation": "The '-r' flag in the 'sort' command sorts the file in reverse order.",
+    "command_example": "sort -r data.txt"
+  },
+  {
+    "question": "You want to extract files from a compressed archive 'archive.tar.gz'. Which command should you use?",
+    "options": [
+      "tar -xzf archive.tar.gz",
+      "tar -cf archive.tar.gz",
+      "tar -xv archive.tar.gz",
+      "unzip archive.tar.gz"
+    ],
+    "correct": 0,
+    "explanation": "The 'tar -xzf' command extracts the contents of a '.tar.gz' archive.",
+    "command_example": "tar -xzf archive.tar.gz"
+  },
+  {
+    "question": "You want to view the last 20 lines of a log file 'syslog.log'. Which command should you use?",
+    "options": [
+      "tail -n 20 syslog.log",
+      "head -n 20 syslog.log",
+      "cat syslog.log | tail -n 20",
+      "tail syslog.log -n 20"
+    ],
+    "correct": 0,
+    "explanation": "The '-n' flag specifies the number of lines to display using the 'tail' command.",
+    "command_example": "tail -n 20 syslog.log"
+  },
+  {
+    "question": "You want to create an empty file called 'newfile.txt'. Which command should you use?",
+    "options": [
+      "touch newfile.txt",
+      "create newfile.txt",
+      "echo > newfile.txt",
+      "cat > newfile.txt"
+    ],
+    "correct": 0,
+    "explanation": "The 'touch' command creates an empty file if it doesn't exist, or updates its timestamp.",
+    "command_example": "touch newfile.txt"
+  }
+]

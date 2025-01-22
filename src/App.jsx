@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Groq } from "groq-sdk";
+import questions from "./questions.json";
 
 const QUIZ_TIME = 600; // 10 minutes in seconds
 
 const App = () => {
-  const [difficulty, setDifficulty] = useState("easy");
   const [isLoading, setIsLoading] = useState(false);
-  const [questions, setQuestions] = useState([]);
+  const [quizQuestions, setQuizQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const [timeLeft, setTimeLeft] = useState(QUIZ_TIME);
@@ -39,114 +38,35 @@ const App = () => {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
- const generateQuiz = async () => {
-   setIsLoading(true);
-   try {
-     const groq = new Groq({
-       apiKey: import.meta.env.VITE_GROQ_API_KEY,
-       dangerouslyAllowBrowser: true,
-     });
-
-     const prompt = `Return a JSON object containing Linux command quiz questions. Format:
-{
-  "questions": [
-    {
-      "question": "string",
-      "options": ["string", "string", "string", "string"],
-      "correct": number,
-      "explanation": "string",
-      "command_example": "string"
+  const generateQuiz = () => {
+    setIsLoading(true);
+    try {
+      // Randomly select 10 questions from the questions array
+      const shuffled = [...questions].sort(() => 0.5 - Math.random());
+      const selected = shuffled.slice(0, 10);
+      setQuizQuestions(selected);
+      setQuizStarted(true);
+      setTimeLeft(QUIZ_TIME);
+    } catch (error) {
+      console.error("Error generating quiz:", error);
+      alert("Error generating quiz. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
-  ]
-}
+  };
 
-Requirements:
-- Generate 10 ${difficulty} multiple-choice questions about Linux commands
-- Focus on: cat, chmod, cd, cp, date, echo, ftp, grep, head, ls, lpr, more, mkdir, mv, ncftp, print, pwd, rm, rmdir, rsh, setenv, sort, tail, tar, telnet, wc
-- Make questions practical and scenario-based
-- Include clear explanations and command examples
-- Ensure response is ONLY the JSON object, no additional text or markdown
-- correct should be a number between 0 and 3 representing the correct answer index
-- Vary the correct answer indices - don't always use the same index
-- Return valid, parseable JSON
-
-Example of one question object:
-{
-  "question": "You need to find all files containing the word 'error' in a log directory. Which command should you use?",
-  "options": [
-    "ls -l /var/log/ | error",
-    "find /var/log/ -name error",
-    "cat /var/log/ | error",
-    "grep -r 'error' /var/log/"
-  ],
-  "correct": 3,
-  "explanation": "The grep command with -r (recursive) flag searches through all files in the specified directory and its subdirectories for the given pattern.",
-  "command_example": "grep -r 'error' /var/log/"
-}`;
-
-     const response = await groq.chat.completions.create({
-       messages: [
-         {
-           role: "system",
-           content:
-             "You are a JSON generator. Only output valid JSON objects without any additional text, markdown formatting, or explanation.",
-         },
-         {
-           role: "user",
-           content: prompt,
-         },
-       ],
-       model: "llama-3.3-70b-versatile",
-       temperature: 0.7,
-       max_tokens: 2000,
-     });
-
-     let jsonString = response.choices[0].message.content.trim();
-
-     // Remove any potential markdown code block indicators
-     jsonString = jsonString
-       .replace(/```json/g, "")
-       .replace(/```/g, "")
-       .trim();
-
-     try {
-       const quizData = JSON.parse(jsonString);
-       if (
-         quizData.questions &&
-         Array.isArray(quizData.questions) &&
-         quizData.questions.length === 10
-       ) {
-         setQuestions(quizData.questions);
-         setQuizStarted(true);
-         setTimeLeft(QUIZ_TIME);
-       } else {
-         throw new Error("Invalid quiz data format");
-       }
-     } catch (parseError) {
-       console.error("JSON Parse Error:", parseError);
-       console.log("Received content:", jsonString);
-       throw new Error("Failed to parse quiz data");
-     }
-   } catch (error) {
-     console.error("Error generating quiz:", error);
-     alert("Error generating quiz. Please try again.");
-   } finally {
-     setIsLoading(false);
-   }
- };
-
- const handleAnswer = (questionIndex, answerIndex) => {
-   if (!quizFinished && !reviewMode) {
-     setAnswers((prev) => ({
-       ...prev,
-       [questionIndex]: answerIndex,
-     }));
-   }
- };
+  const handleAnswer = (questionIndex, answerIndex) => {
+    if (!quizFinished && !reviewMode) {
+      setAnswers((prev) => ({
+        ...prev,
+        [questionIndex]: answerIndex,
+      }));
+    }
+  };
 
   const finishQuiz = () => {
     let finalScore = 0;
-    questions.forEach((question, index) => {
+    quizQuestions.forEach((question, index) => {
       if (answers[index] === question.correct) {
         finalScore++;
       }
@@ -171,7 +91,7 @@ Example of one question object:
     setScore(0);
     setShowAnswers(false);
     setTimeLeft(QUIZ_TIME);
-    setQuestions([]);
+    setQuizQuestions([]);
   };
 
   return (
@@ -186,20 +106,8 @@ Example of one question object:
           {!quizStarted && (
             <div className="max-w-md mx-auto backdrop-blur-lg bg-gray-800/50 p-8 rounded-2xl shadow-xl border border-gray-700">
               <h2 className="text-2xl font-bold mb-6 text-center">
-                Choose Your Challenge
+                Ready to Test Your Linux Knowledge?
               </h2>
-              <div className="mb-8">
-                <label className="block mb-3 text-lg">Select Difficulty:</label>
-                <select
-                  value={difficulty}
-                  onChange={(e) => setDifficulty(e.target.value)}
-                  className="w-full p-3 bg-gray-700 rounded-lg border border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-500/20 outline-none transition"
-                >
-                  <option value="easy">Easy</option>
-                  <option value="medium">Medium</option>
-                  <option value="hard">Hard</option>
-                </select>
-              </div>
               <button
                 onClick={generateQuiz}
                 className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 p-4 rounded-lg font-medium text-lg transition transform hover:scale-105 active:scale-95"
@@ -224,7 +132,7 @@ Example of one question object:
 
           {/* Quiz Questions */}
           {((quizStarted && !quizFinished && !isLoading) || reviewMode) &&
-            questions.length > 0 && (
+            quizQuestions.length > 0 && (
               <div className="backdrop-blur-lg bg-gray-800/50 p-8 rounded-2xl shadow-xl border border-gray-700">
                 <div className="flex justify-between items-center mb-6">
                   <div className="flex items-center gap-4">
@@ -246,10 +154,10 @@ Example of one question object:
 
                 <div className="mb-8">
                   <h2 className="text-xl font-medium mb-6 leading-relaxed">
-                    {questions[currentQuestion].question}
+                    {quizQuestions[currentQuestion].question}
                   </h2>
                   <div className="space-y-4">
-                    {questions[currentQuestion]?.options.map(
+                    {quizQuestions[currentQuestion]?.options.map(
                       (option, index) => (
                         <button
                           key={index}
@@ -262,12 +170,13 @@ Example of one question object:
                           } ${
                             answers[currentQuestion] === index
                               ? showAnswers
-                                ? index === questions[currentQuestion].correct
+                                ? index ===
+                                  quizQuestions[currentQuestion].correct
                                   ? "bg-green-600/80 border-2 border-green-400"
                                   : "bg-red-600/80 border-2 border-red-400"
                                 : "bg-blue-600/80 border-2 border-blue-400"
                               : showAnswers &&
-                                index === questions[currentQuestion].correct
+                                index === quizQuestions[currentQuestion].correct
                               ? "bg-green-600/50 border-2 border-green-400"
                               : "bg-gray-700 border border-gray-600"
                           }`}
@@ -280,7 +189,8 @@ Example of one question object:
                               {option}
                             </div>
                             {showAnswers &&
-                              index === questions[currentQuestion].correct && (
+                              index ===
+                                quizQuestions[currentQuestion].correct && (
                                 <span className="text-green-400 font-medium">
                                   ✓ Correct Answer
                                 </span>
@@ -291,21 +201,21 @@ Example of one question object:
                     )}
                   </div>
 
-                  {/* Explanation Section - Only shown in review mode or after answering */}
+                  {/* Explanation Section */}
                   {(reviewMode || (showAnswers && quizFinished)) && (
                     <div className="mt-8 p-6 bg-gray-700/50 rounded-lg border border-gray-600">
                       <h3 className="text-xl font-semibold mb-4 text-blue-300">
                         Explanation
                       </h3>
                       <p className="text-gray-200 mb-4">
-                        {questions[currentQuestion].explanation}
+                        {quizQuestions[currentQuestion].explanation}
                       </p>
                       <div className="mt-4">
                         <h4 className="font-semibold text-blue-300 mb-2">
                           Example Usage:
                         </h4>
                         <code className="block p-3 bg-gray-800 rounded-lg font-mono text-sm">
-                          {questions[currentQuestion].command_example}
+                          {quizQuestions[currentQuestion].command_example}
                         </code>
                       </div>
                     </div>
@@ -333,7 +243,7 @@ Example of one question object:
                       </button>
                     )}
                   </div>
-                  {currentQuestion === questions.length - 1 ? (
+                  {currentQuestion === quizQuestions.length - 1 ? (
                     !reviewMode &&
                     !quizFinished && (
                       <button
@@ -347,7 +257,7 @@ Example of one question object:
                     <button
                       onClick={() =>
                         setCurrentQuestion((prev) =>
-                          Math.min(questions.length - 1, prev + 1)
+                          Math.min(quizQuestions.length - 1, prev + 1)
                         )
                       }
                       className="px-6 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition transform hover:scale-105"
